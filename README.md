@@ -27,7 +27,7 @@ export DEEPSEEK_API_KEY=sk-...      # 加到 ~/.zshrc 或 ~/.bashrc
 自检：
 
 ```bash
-bash ~/.agents/skills/deepseek-tts/scripts/tts.sh "你好，我是 DeepSeek。" /tmp/speech.wav
+python3 ~/.agents/skills/deepseek-tts/scripts/tts.py "你好，我是 DeepSeek。" /tmp/speech.wav
 ```
 
 后续如果本 Skill 有更新，执行：
@@ -43,19 +43,19 @@ skills/
 └── deepseek-tts/
     ├── SKILL.md
     └── scripts/
-        └── tts.sh
+        └── tts.py
 ```
 
 | 文件                 | 作用                                                                                                                  |
 | -------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | `SKILL.md`           | 入口：默认参数表、三段流程（确认文本 / 合成 / 交付，均带完成判据）、裸 `curl` 等价调用、格式转换、错误码处理           |
-| `scripts/tts.sh`     | 整段合成脚本：纯 bash JSON 转义（不依赖 python）、按输出后缀选 `wav`/`pcm`、503/504/429 退避重试 3 次、0 字节响应视为失败，支持 `-` 读 stdin   |
+| `scripts/tts.py`     | 整段合成脚本（Python 3 标准库，无第三方依赖）：`json` 编码免手写转义、按输出后缀选 `wav`/`pcm`、503/504/429 退避重试 3 次、0 字节与中途断流均视为失败、原子写入，支持 `-` 读 stdin |
 
 ## 已知限制
 
 - 单次请求最多 30 分钟音频、10,000 计费字符、请求体 ≤ 64 KiB；超长文本需按段落切分后拼接。
 - 不支持语速调节，不支持中断续传。
-- 只依赖 `curl`（JSON 转义用纯 bash 实现）；音频后处理（mp3 转换、pcm 转 wav）需要 `ffmpeg`。
+- 依赖 `python3`（3.8+，只用标准库，无需 `pip install`）；音频后处理（mp3 转换、pcm 转 wav）需要 `ffmpeg`。
 
 ## 许可证
 

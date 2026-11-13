@@ -5,3 +5,6 @@ skills-lock.json
 *.wav
 *.mp3
 *.pcm
+
+__pycache__/
+*.pyc
