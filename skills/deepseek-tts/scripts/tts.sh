@@ -22,8 +22,22 @@ fi
 
 : "${DEEPSEEK_API_KEY:?未设置 DEEPSEEK_API_KEY}"
 
+# JSON 转义（纯 bash）：先转义反斜杠、再引号，然后换行/制表/回车，最后删掉其余控制字符（JSON 不接受裸控制字符）。
+json_escape() {
+  local s=$1
+  s=${s//\\/\\\\}
+  s=${s//\"/\\\"}
+  s=${s//$'\t'/\\t}
+  s=${s//$'\r'/\\r}
+  s=${s//$'\n'/\\n}
+  s=${s//[$'\001'-$'\010'$'\013'$'\014'$'\016'-$'\037'$'\177']/}
+  printf '%s' "$s"
+}
+
+body=$(printf '{"text":"%s","voice_id":"%s","format":"%s"}' \
+  "$(json_escape "$text")" "$(json_escape "$voice")" "$(json_escape "$format")")
+
 tmp=$(mktemp); trap 'rm -f "$tmp"' EXIT
-body=$(python3 -c 'import json,sys; print(json.dumps({"text": sys.stdin.read(), "voice_id": sys.argv[1], "format": sys.argv[2]}))' "$voice" "$format" <<<"$text")
 
 for attempt in 1 2 3; do
   code=$(curl -sS -o "$tmp" -w '%{http_code}' https://api.deepseek.com/v1/tools/tts \

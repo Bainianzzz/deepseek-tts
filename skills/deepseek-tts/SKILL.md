@@ -4,7 +4,7 @@ version: 1.0.0
 description: "DeepSeek 语音合成（TTS）：把文字转成语音音频，当用户要朗读/配音/生成语音、把文本或回答转成 mp3/wav/pcm 时使用。"
 metadata:
   requires:
-    bins: ["curl", "python3"]
+    bins: ["curl"]
   env: ["DEEPSEEK_API_KEY"]
 ---
 
@@ -39,7 +39,7 @@ bash <skill-dir>/scripts/tts.sh "暗潮男声示例" /tmp/a.wav tide
 cat long.md | bash <skill-dir>/scripts/tts.sh - /tmp/long.wav
 ```
 
-脚本已内置：JSON 转义、默认 `stella`、按后缀选 `wav`/`pcm`、503/504/429 退避重试 3 次、0 字节响应视为失败。
+脚本已内置：JSON 转义（纯 bash，只依赖 `curl`）、默认 `stella`、按后缀选 `wav`/`pcm`、503/504/429 退避重试 3 次、0 字节响应视为失败。
 
 不用脚本时等价的裸调用：
 
