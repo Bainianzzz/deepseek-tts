@@ -1,5 +1,7 @@
 # deepseek-tts skill
 
+[English](README.en.md) | 中文
+
 [DeepSeek TTS](https://api-docs.deepseek.com/zh-cn/guides/tts) 的 Agent Skill：把文字转成自然语音。语种不用指定，服务端按文本自动识别（普通话、粤语、英语、日语、韩语、马来语、阿拉伯语、印尼语、泰语、越南语）。
 
 本 Skill 只做一件事：给定文本，产出一个可直接播放的音频文件。默认 `voice_id=stella`（海星，女声）、`format=wav`、`filter_markdown=true`（朗读前自动去掉 Markdown），不需要向用户询问参数。
